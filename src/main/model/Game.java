@@ -8,7 +8,7 @@ import java.util.List;
  * Represents a Game app;
  */
 public class Game {
-    private int coins;
+    protected int coins;
     private final int piratePrice;
     private int buccaneerPrice;
 
@@ -16,9 +16,9 @@ public class Game {
     private CrewMate pirate;
     private CrewMate buccaneer;
 
-    private Timer timer;
-    private int timerSpeed;
-    private double autoPerSec;
+    protected Timer timer;
+    protected int timerSpeed;
+    protected double autoPerSec;
     private boolean timerOn;
 
     // EFFECTS: initializes a Game app
