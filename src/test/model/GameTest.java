@@ -77,6 +77,17 @@ public class GameTest {
     }
 
     @Test
+    public void testGetNumberOfPiratesMixedOne() {
+        for (int i = 1; i <= 40; i++) {
+            game.tapTreasure();
+        }
+        game.buyBuccaneer();
+        assertEquals(0, game.getNumberOfPirates());
+        game.buyPirate();
+        assertEquals(1, game.getNumberOfPirates());
+    }
+
+    @Test
     public void testGetNumberOfPiratesSome() {
         for (int i = 1; i <= 40; i++) {
             game.tapTreasure();
@@ -86,9 +97,21 @@ public class GameTest {
         assertEquals(2, game.getNumberOfPirates());
     }
 
+
     @Test
     public void testGetNumberOfBuccaneersNone() {
         assertEquals(0, game.getNumberOfBuccaneers());
+    }
+
+    @Test
+    public void testGetNumberOfBuccaneersMixedOne() {
+        for (int i = 1; i <= 40; i++) {
+            game.tapTreasure();
+        }
+        game.buyPirate();
+        assertEquals(0, game.getNumberOfBuccaneers());
+        game.buyBuccaneer();
+        assertEquals(1, game.getNumberOfBuccaneers());
     }
 
     @Test
@@ -133,26 +156,20 @@ public class GameTest {
         assertTrue(game.buyBuccaneer());
     }
 
-//    @Test
-//    public void testSetTimer() {
-//        for (int i = 1; i <= 10; i++) {
-//            game.tapTreasure();
-//        }
-//        game.buyPirate();
-//        game.setTimer();
-//        timer = new Timer(10000, new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                int coins = game.getCoins();
-//                game.setCoins(coins);
-//            }
-//        });
-//        assertEquals(5, game.getCoins());
-//
-//    }
+    @Test
+    public void testSetTimer() {
+        for (int i = 1; i <= 10; i++) {
+            game.tapTreasure();
+        }
+        game.buyPirate();
 
-//    @Test
-//    public void testUpdateTimerSettings() {
+        //game.setTimer(1000);
+        assertEquals(10000, game.getTimerSpeed());
+
 //
-//    }
+//        assertEquals();
+
+    }
+
+
 }

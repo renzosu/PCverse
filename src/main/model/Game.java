@@ -74,6 +74,11 @@ public class Game {
         return numBuccaneers;
     }
 
+    // EFFECTS: returns timerSpeed
+    public int getTimerSpeed() {
+        return timerSpeed;
+    }
+
     // MODIFIES: this
     // EFFECTS: taps treasure to increase coins by one
     public void tapTreasure() {
@@ -120,8 +125,8 @@ public class Game {
 
     // MODIFIES: this
     // EFFECTS: creates a new tapping timer with given timerSpeed
-    public void setTimer() {
-        timer = new Timer(timerSpeed, e -> coins++);
+    public void setTimer(int ts) {
+        timer = new Timer(ts, e -> coins++);
     }
 
     // Timer speed and update modelled from
@@ -138,7 +143,7 @@ public class Game {
         double speed = 1 / autoPerSec * 1000;
         timerSpeed = (int)Math.round(speed);
 
-        setTimer();
+        setTimer(timerSpeed);
         timer.start();
     }
 }
