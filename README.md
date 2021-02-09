@@ -14,7 +14,7 @@ C. The project serves as an incentive to apply *concepts* to create a useful **a
 
 ## User Stories
 
-A *bulleted* list:
+In the context of a PC model:
 
 - As a user, I want to be able to send a message in my SMS.
 - As a user, I want to be able to delete a message in my SMS.
