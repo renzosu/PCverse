@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Tests for the Message class
+ * Tests for the CrewMate class
  */
 public class CrewMateTest {
     private CrewMate pirate;

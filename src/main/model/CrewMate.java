@@ -1,7 +1,7 @@
 package model;
 
 /**
- * Represents a crewmate;
+ * Represents a CrewMate
  */
 public class CrewMate {
     private String crewMate;

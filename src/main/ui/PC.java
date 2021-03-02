@@ -10,8 +10,11 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Scanner;
 
-// A personal computer model
-// User input based on TellerApp https://github.students.cs.ubc.ca/CPSC210/TellerApp
+
+/**
+ * Represents a personal computer model
+ * User input based on TellerApp https://github.students.cs.ubc.ca/CPSC210/TellerApp
+ */
 public class PC {
     private static final String JSON_STORE = "./data/SMS.json";
     private SMS sms;

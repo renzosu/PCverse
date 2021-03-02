@@ -4,7 +4,7 @@ import org.json.JSONObject;
 import persistence.Writable;
 
 /**
- * Represents a message;
+ * Represents a message
  */
 public class Message implements Writable {
     private String message;

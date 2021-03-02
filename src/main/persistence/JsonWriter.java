@@ -6,8 +6,11 @@ import org.json.JSONObject;
 
 import java.io.*;
 
-// Represents a writer that writes JSON representation of workroom to file
-// Modelled based on TellerApp https://github.students.cs.ubc.ca/CPSC210/TellerApp
+/**
+ * Represents a writer that writes JSON representation of workroom to file
+ * Modelled based on JsonSerializationDemo https://github.students.cs.ubc.ca/CPSC210/JsonSerializationDemo.git
+ */
+
 public class JsonWriter {
     private static final int TAB = 4;
     private PrintWriter writer;

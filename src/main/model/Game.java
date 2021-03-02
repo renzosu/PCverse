@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Represents a Game app;
+ * Represents a Game app
  */
 public class Game {
     protected int coins;

@@ -7,6 +7,9 @@ import javax.swing.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Tests for the Game class
+ */
 public class GameTest {
     private Game game;
 
