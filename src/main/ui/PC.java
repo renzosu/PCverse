@@ -3,18 +3,27 @@ package ui;
 import model.Game;
 import model.Message;
 import model.SMS;
+import persistence.JsonReader;
+import persistence.JsonWriter;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Scanner;
 
 // A personal computer model
 // User input based on TellerApp https://github.students.cs.ubc.ca/CPSC210/TellerApp
 public class PC {
+    private static final String JSON_STORE = "./data/SMS.json";
     private SMS sms;
     private Game game;
     private Scanner input;
+    private JsonWriter jsonWriter;
+    private JsonReader jsonReader;
 
     // EFFECTS: runs the PC model
     public PC() {
+        jsonWriter = new JsonWriter(JSON_STORE);
+        jsonReader = new JsonReader(JSON_STORE);
         runPC();
     }
 
@@ -72,15 +81,6 @@ public class PC {
                 System.out.println("Selection not valid...");
                 break;
         }
-
-//        if (command.equals("s")) {
-//            doOpenSMS();
-//        } else if (command.equals("g")) {
-//            doOpenGame();
-//        } else {
-//            System.out.println("Selection not valid...");
-//        }
-
     }
 
     // MODIFIES: this
@@ -95,6 +95,7 @@ public class PC {
             command = command.toLowerCase();
 
             if (command.equals("q")) {
+                doQuitSaveProcedure();
                 keepGoing = false;
             } else {
                 processCommandSMS(command);
@@ -102,6 +103,46 @@ public class PC {
         }
         System.out.println("\nLeaving SMS app...");
 
+    }
+
+    private void doQuitSaveProcedure() {
+        boolean keepGoing = true;
+        String command;
+
+        while (keepGoing) {
+            displayQuitSave();
+            command = input.next();
+            command = command.toLowerCase();
+
+            if (command.equals("q")) {
+                keepGoing = false;
+            } else {
+                processCommandQuitSave(command);
+                break;
+            }
+        }
+    }
+
+    // EFFECTS: displays menu of QuitSave options to user
+    private void displayQuitSave() {
+        System.out.println("Would you like to save messages before quitting?");
+        System.out.println("\ty -> yes, save and quit");
+        System.out.println("\tn -> no, quit without saving");
+    }
+
+    // MODIFIES: this
+    // EFFECTS: processes user command for QuitSave
+    private void processCommandQuitSave(String command) {
+        switch (command) {
+            case "y":
+                doSaveMessages();
+                break;
+            case "n":
+                break;
+            default:
+                System.out.println("Selection not valid...");
+                doQuitSaveProcedure();
+        }
     }
 
     // MODIFIES: this
@@ -120,6 +161,12 @@ public class PC {
             case "n":
                 doDisplaySize();
                 break;
+            case "z":
+                doSaveMessages();
+                break;
+            case "x":
+                doLoadMessages();
+                break;
             default:
                 System.out.println("Selection not valid...");
                 break;
@@ -133,6 +180,8 @@ public class PC {
         System.out.println("\td -> delete a message");
         System.out.println("\tv -> view all sent messages");
         System.out.println("\tn -> view number of sent messages");
+        System.out.println("\tz -> save messages to file");
+        System.out.println("\tx -> load messages from file");
         System.out.println("\tq -> go back to PC desktop");
     }
 
@@ -171,6 +220,29 @@ public class PC {
     private void doDisplaySize() {
         System.out.print("Total number of sent messages: ");
         System.out.println(sms.numMessages());
+    }
+
+    // EFFECTS: saves messages to file
+    private void doSaveMessages() {
+        try {
+            jsonWriter.open();
+            jsonWriter.write(sms);
+            jsonWriter.close();
+            System.out.println("Saved messages" + " to " + JSON_STORE);
+        } catch (FileNotFoundException e) {
+            System.out.println("Unable to write to file: " + JSON_STORE);
+        }
+    }
+
+    // MODIFIES: this
+    // EFFECTS: loads messages from file
+    private void doLoadMessages() {
+        try {
+            sms = jsonReader.read();
+            System.out.println("Loaded messages" + " from " + JSON_STORE);
+        } catch (IOException e) {
+            System.out.println("Unable to read from file: " + JSON_STORE);
+        }
     }
 
     // MODIFIES: this

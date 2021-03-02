@@ -15,6 +15,7 @@ import java.util.stream.Stream;
 import org.json.*;
 
 // Represents a reader that reads workroom from JSON data stored in file
+// Modelled based on TellerApp https://github.students.cs.ubc.ca/CPSC210/TellerApp
 public class JsonReader {
     private String source;
 

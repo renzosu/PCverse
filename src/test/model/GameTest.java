@@ -10,16 +10,9 @@ import static org.junit.jupiter.api.Assertions.*;
 public class GameTest {
     private Game game;
 
-//    private int coins;
-//
-//    private Timer timer;
-//    private int timerSpeed;
-//    private double autoPerSec;
-
     @BeforeEach
     void runBefore() {
         game = new Game();
-        //coins = 0;
     }
 
     @Test
@@ -178,9 +171,5 @@ public class GameTest {
         game.setTimer((int)Math.round(1 / 0.2 * 1000));
 
         assertEquals(5000, game.getTimerSpeed());
-        //assertEquals(game.timer, new Timer(5000, e -> game.coins++));
-
     }
-
-
 }

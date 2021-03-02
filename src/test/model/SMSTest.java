@@ -3,6 +3,9 @@ package model;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -18,6 +21,13 @@ public class SMSTest {
         sms = new SMS();
         m1 = new Message("Hello");
         m2 = new Message("Goodbye");
+    }
+
+    @Test
+    public void testGetMessages() {
+        sms.sendMessage(m1);
+        assertEquals(1, sms.getMessages().size());
+        assertEquals("Hello", sms.getMessages().get(0).getMessage());
     }
 
     @Test
@@ -67,6 +77,22 @@ public class SMSTest {
         assertEquals(1, sms.numMessages());
         sms.deleteMessage();
         assertEquals(0, sms.numMessages());
+    }
+
+    @Test
+    void testMessagesToJson() {
+        JSONArray jsonArray = new JSONArray();
+        jsonArray.put(m1.toJson());
+        sms.sendMessage(m1);
+        assertEquals(jsonArray.length(), sms.messagesToJson().length());
+    }
+
+    @Test
+    void testToJson() {
+        sms.sendMessage(m1);
+        JSONObject json = new JSONObject();
+        json.put("messages", sms.messagesToJson());
+        assertEquals(json.length(), sms.toJson().length());
     }
 
 }
