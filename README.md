@@ -22,3 +22,5 @@ In the context of a PC model:
 - As a user, I want to be able to view the number of sent messages in my SMS.
 - As a user, I want to be able to earn treasure coins in my game.
 - As a user, I want to be able to use treasure coins in my game.
+- As a user, I want to be able to save my progress in my game.
+- As a user, I want to be able to load my progress in my game.

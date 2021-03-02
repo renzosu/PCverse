@@ -1,17 +1,26 @@
 package model;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+import persistence.Writable;
+
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Represents an SMS app: a list of messages
  */
-public class SMS {
+public class SMS implements Writable {
     private List<Message> messages;
 
     // EFFECTS: initializes an SMS app
     public SMS() {
         messages = new ArrayList<>();
+    }
+
+    // EFFECTS: returns list of messages
+    public List<Message> getMessages() {
+        return messages;
     }
 
     // MODIFIES: this
@@ -45,5 +54,23 @@ public class SMS {
     // EFFECTS: displays number of messages in SMS's list of messages
     public int numMessages() {
         return messages.size();
+    }
+
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("messages", messagesToJson());
+        return json;
+    }
+
+    // EFFECTS: returns things in this workroom as a JSON array
+    private JSONArray messagesToJson() {
+        JSONArray jsonArray = new JSONArray();
+
+        for (Message m : messages) {
+            jsonArray.put(m.toJson());
+        }
+
+        return jsonArray;
     }
 }
