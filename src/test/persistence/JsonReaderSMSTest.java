@@ -14,11 +14,11 @@ import static org.junit.jupiter.api.Assertions.*;
  * Tests for the JsonReader class
  * Modelled based on JsonSerializationDemo https://github.students.cs.ubc.ca/CPSC210/JsonSerializationDemo.git
  */
-class JsonReaderTest extends JsonTest {
+class JsonReaderSMSTest extends JsonSMSTest {
 
     @Test
     void testReaderNonExistentFile() {
-        JsonReader reader = new JsonReader("./data/noSuchFile.json");
+        JsonReaderSMS reader = new JsonReaderSMS("./data/noSuchFile.json");
         try {
             SMS sms = reader.read();
             fail("IOException expected");
@@ -29,7 +29,7 @@ class JsonReaderTest extends JsonTest {
 
     @Test
     void testReaderEmptyWorkRoom() {
-        JsonReader reader = new JsonReader("./data/testReaderEmptySMS.json");
+        JsonReaderSMS reader = new JsonReaderSMS("./data/testReaderEmptySMS.json");
         try {
             SMS sms = reader.read();
             assertEquals(0, sms.numMessages());
@@ -40,7 +40,7 @@ class JsonReaderTest extends JsonTest {
 
     @Test
     void testReaderGeneralWorkRoom() {
-        JsonReader reader = new JsonReader("./data/testReaderGeneralSMS.json");
+        JsonReaderSMS reader = new JsonReaderSMS("./data/testReaderGeneralSMS.json");
         try {
             SMS sms = reader.read();
             List<Message> messages = sms.getMessages();

@@ -3,8 +3,10 @@ package ui;
 import model.Game;
 import model.Message;
 import model.SMS;
-import persistence.JsonReader;
-import persistence.JsonWriter;
+import persistence.JsonReaderSMS;
+import persistence.JsonReaderGame;
+import persistence.JsonWriterSMS;
+import persistence.JsonWriterGame;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -16,17 +18,23 @@ import java.util.Scanner;
  * User input based on TellerApp https://github.students.cs.ubc.ca/CPSC210/TellerApp
  */
 public class PC {
-    private static final String JSON_STORE = "./data/SMS.json";
+    private static final String JSON_STORE_SMS = "./data/SMS.json";
+    private static final String JSON_STORE_GAME = "./data/Game.json";
     private SMS sms;
     private Game game;
     private Scanner input;
-    private JsonWriter jsonWriter;
-    private JsonReader jsonReader;
+    private JsonWriterSMS jsonWriterSMS;
+    private JsonReaderSMS jsonReaderSMS;
+    private JsonWriterGame jsonWriterGame;
+    private JsonReaderGame jsonReaderGame;
+
 
     // EFFECTS: runs the PC model
     public PC() {
-        jsonWriter = new JsonWriter(JSON_STORE);
-        jsonReader = new JsonReader(JSON_STORE);
+        jsonWriterSMS = new JsonWriterSMS(JSON_STORE_SMS);
+        jsonReaderSMS = new JsonReaderSMS(JSON_STORE_SMS);
+        jsonWriterGame = new JsonWriterGame(JSON_STORE_GAME);
+        jsonReaderGame = new JsonReaderGame(JSON_STORE_GAME);
         runPC();
     }
 
@@ -228,12 +236,12 @@ public class PC {
     // EFFECTS: saves messages to file
     private void doSaveMessages() {
         try {
-            jsonWriter.open();
-            jsonWriter.write(sms);
-            jsonWriter.close();
-            System.out.println("Saved messages" + " to " + JSON_STORE);
+            jsonWriterSMS.open();
+            jsonWriterSMS.write(sms);
+            jsonWriterSMS.close();
+            System.out.println("Saved messages" + " to " + JSON_STORE_SMS);
         } catch (FileNotFoundException e) {
-            System.out.println("Unable to write to file: " + JSON_STORE);
+            System.out.println("Unable to write to file: " + JSON_STORE_SMS);
         }
     }
 
@@ -241,10 +249,10 @@ public class PC {
     // EFFECTS: loads messages from file
     private void doLoadMessages() {
         try {
-            sms = jsonReader.read();
-            System.out.println("Loaded messages" + " from " + JSON_STORE);
+            sms = jsonReaderSMS.read();
+            System.out.println("Loaded messages" + " from " + JSON_STORE_SMS);
         } catch (IOException e) {
-            System.out.println("Unable to read from file: " + JSON_STORE);
+            System.out.println("Unable to read from file: " + JSON_STORE_SMS);
         }
     }
 
@@ -271,28 +279,24 @@ public class PC {
     // MODIFIES: this
     // EFFECTS: processes user command for Game app
     private void processCommandGame(String command) {
-        switch (command) {
-            case "c":
-                doCheckCoins();
-                break;
-            case "t":
-                doTapTreasure();
-                break;
-            case "p":
-                doBuyPirate();
-                break;
-            case "b":
-                doBuyBuccaneer();
-                break;
-            case "v":
-                doDisplaySpeed();
-                break;
-            case "n":
-                doDisplayCrewMates();
-                break;
-            default:
-                System.out.println("Selection not valid...");
-                break;
+        if (command.equals("c")) {
+            doCheckCoins();
+        } else if (command.equals("t")) {
+            doTapTreasure();
+        } else if (command.equals("p")) {
+            doBuyPirate();
+        } else if (command.equals("b")) {
+            doBuyBuccaneer();
+        } else if (command.equals("v")) {
+            doDisplaySpeed();
+        } else if (command.equals("n")) {
+            doDisplayCrewMates();
+        } else if (command.equals("z")) {
+            doSaveGame();
+        } else if (command.equals("x")) {
+            doLoadGame();
+        } else {
+            System.out.println("Selection not valid...");
         }
     }
 
@@ -305,6 +309,8 @@ public class PC {
         System.out.println("\tb -> buy buccaneer for 30 coins");
         System.out.println("\tv -> view auto coin speed");
         System.out.println("\tn -> view crewMate composition");
+        System.out.println("\tz -> save game to file");
+        System.out.println("\tx -> load game from file");
         System.out.println("\tq -> go back to PC desktop");
     }
 
@@ -351,4 +357,28 @@ public class PC {
         System.out.println("There are " + game.getNumberOfPirates() + " pirates and "
                 + game.getNumberOfBuccaneers() + " buccaneers on board");
     }
+
+    // EFFECTS: saves game to file
+    private void doSaveGame() {
+        try {
+            jsonWriterGame.open();
+            jsonWriterGame.write(game);
+            jsonWriterGame.close();
+            System.out.println("Saved game" + " to " + JSON_STORE_GAME);
+        } catch (FileNotFoundException e) {
+            System.out.println("Unable to write to file: " + JSON_STORE_GAME);
+        }
+    }
+
+    // MODIFIES: this
+    // EFFECTS: loads game from file
+    private void doLoadGame() {
+        try {
+            game = jsonReaderGame.read();
+            System.out.println("Loaded game" + " from " + JSON_STORE_GAME);
+        } catch (IOException e) {
+            System.out.println("Unable to read from file: " + JSON_STORE_GAME);
+        }
+    }
+
 }

@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * Tests for the JsonWriter class
  * Modelled based on JsonSerializationDemo https://github.students.cs.ubc.ca/CPSC210/JsonSerializationDemo.git
  */
-class JsonWriterTest extends JsonTest {
+class JsonWriterSMSTest extends JsonSMSTest {
     //NOTE TO CPSC 210 STUDENTS: the strategy in designing tests for the JsonWriter is to
     //write data to a file and then use the reader to read it back in and check that we
     //read in a copy of what was written out.
@@ -22,7 +22,7 @@ class JsonWriterTest extends JsonTest {
     void testWriterInvalidFile() {
         try {
             SMS sms = new SMS();
-            JsonWriter writer = new JsonWriter("./data/my\0illegal:fileName.json");
+            JsonWriterSMS writer = new JsonWriterSMS("./data/my\0illegal:fileName.json");
             writer.open();
             fail("IOException was expected");
         } catch (IOException e) {
@@ -34,12 +34,12 @@ class JsonWriterTest extends JsonTest {
     void testWriterEmptySMS() {
         try {
             SMS sms = new SMS();
-            JsonWriter writer = new JsonWriter("./data/testWriterEmptySMS.json");
+            JsonWriterSMS writer = new JsonWriterSMS("./data/testWriterEmptySMS.json");
             writer.open();
             writer.write(sms);
             writer.close();
 
-            JsonReader reader = new JsonReader("./data/testWriterEmptySMS.json");
+            JsonReaderSMS reader = new JsonReaderSMS("./data/testWriterEmptySMS.json");
             sms = reader.read();
             assertEquals(0, sms.numMessages());
         } catch (IOException e) {
@@ -53,12 +53,12 @@ class JsonWriterTest extends JsonTest {
             SMS sms = new SMS();
             sms.sendMessage(new Message("I have to go."));
             sms.sendMessage(new Message("See you next time!"));
-            JsonWriter writer = new JsonWriter("./data/testWriterGeneralSMS.json");
+            JsonWriterSMS writer = new JsonWriterSMS("./data/testWriterGeneralSMS.json");
             writer.open();
             writer.write(sms);
             writer.close();
 
-            JsonReader reader = new JsonReader("./data/testWriterGeneralSMS.json");
+            JsonReaderSMS reader = new JsonReaderSMS("./data/testWriterGeneralSMS.json");
             sms = reader.read();
             List<Message> messages = sms.getMessages();
             assertEquals(2, messages.size());

@@ -52,7 +52,7 @@ public class GameTest {
 
     @Test
     public void testGetAutoCoinSpeedSome() {
-        for (int i = 1; i <= 40; i++) {
+        for (int i = 1; i <= 60; i++) {
             game.tapTreasure();
         }
         game.buyPirate();
@@ -67,7 +67,7 @@ public class GameTest {
 
     @Test
     public void testGetNumberOfCrewMatesSome() {
-        for (int i = 1; i <= 40; i++) {
+        for (int i = 1; i <= 60; i++) {
             game.tapTreasure();
         }
         game.buyPirate();
@@ -109,7 +109,7 @@ public class GameTest {
 
     @Test
     public void testGetNumberOfBuccaneersMixedOne() {
-        for (int i = 1; i <= 40; i++) {
+        for (int i = 1; i <= 60; i++) {
             game.tapTreasure();
         }
         game.buyPirate();
@@ -120,7 +120,7 @@ public class GameTest {
 
     @Test
     public void testGetNumberOfBuccaneersSome() {
-        for (int i = 1; i <= 80; i++) {
+        for (int i = 1; i <= 100; i++) {
             game.tapTreasure();
         }
         game.buyBuccaneer();
@@ -146,7 +146,7 @@ public class GameTest {
 
     @Test
     public void testBuyBuccaneerFailure() {
-        for (int i = 1; i <= 29; i++) {
+        for (int i = 1; i <= 49; i++) {
             game.tapTreasure();
         }
         assertFalse(game.buyBuccaneer());
@@ -154,7 +154,7 @@ public class GameTest {
 
     @Test
     public void testBuyBuccaneerSuccess() {
-        for (int i = 1; i <= 30; i++) {
+        for (int i = 1; i <= 50; i++) {
             game.tapTreasure();
         }
         assertTrue(game.buyBuccaneer());
@@ -169,7 +169,8 @@ public class GameTest {
 
         assertEquals(10000, game.getTimerSpeed());
 
-        game.autoPerSec = 0.2;
+        //game.autoSpeed = 0.2;
+        game.autoSpeed.setAutoSpeed(0.2);
         game.timerSpeed = (int)Math.round(1 / 0.2 * 1000);
         game.setTimer((int)Math.round(1 / 0.2 * 1000));
 

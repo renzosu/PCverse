@@ -1,23 +1,21 @@
 package persistence;
 
-import model.SMS;
+import model.Game;
 import org.json.JSONObject;
-
 
 import java.io.*;
 
 /**
- * Represents a writer that writes JSON representation of workroom to file
+ * Represents a writer that writes JSON representation of game to file
  * Modelled based on JsonSerializationDemo https://github.students.cs.ubc.ca/CPSC210/JsonSerializationDemo.git
  */
-
-public class JsonWriter {
+public class JsonWriterGame {
     private static final int TAB = 4;
     private PrintWriter writer;
     private String destination;
 
     // EFFECTS: constructs writer to write to destination file
-    public JsonWriter(String destination) {
+    public JsonWriterGame(String destination) {
         this.destination = destination;
     }
 
@@ -29,9 +27,9 @@ public class JsonWriter {
     }
 
     // MODIFIES: this
-    // EFFECTS: writes JSON representation of workroom to file
-    public void write(SMS sms) {
-        JSONObject json = sms.toJson();
+    // EFFECTS: writes JSON representation of sms to file
+    public void write(Game game) {
+        JSONObject json = game.toJson();
         saveToFile(json.toString(TAB));
     }
 

@@ -63,7 +63,7 @@ public class SMS implements Writable {
         return json;
     }
 
-    // EFFECTS: returns things in this workroom as a JSON array
+    // EFFECTS: returns things in this sms as a JSON array
     public JSONArray messagesToJson() {
         JSONArray jsonArray = new JSONArray();
 

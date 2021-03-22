@@ -1,5 +1,9 @@
 package model;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+import persistence.Writable;
+
 import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -7,7 +11,7 @@ import java.util.List;
 /**
  * Represents a Game app
  */
-public class Game {
+public class Game implements Writable {
     protected int coins;
     private final int piratePrice;
     private int buccaneerPrice;
@@ -18,17 +22,21 @@ public class Game {
 
     protected Timer timer;
     protected int timerSpeed;
-    protected double autoPerSec;
+
+    protected AutoSpeed autoSpeed;
+    //protected double autoPerSec;
+
     private boolean timerOn;
 
     // EFFECTS: initializes a Game app
     public Game() {
+        autoSpeed = new AutoSpeed(0.0);
         coins = 0;
         crewMates = new ArrayList<>();
 
         piratePrice = 10;
         pirate = new CrewMate("pirate");
-        buccaneerPrice = 30;
+        buccaneerPrice = 50;
         buccaneer = new CrewMate("buccaneer");
 
         timerOn = false;
@@ -39,17 +47,35 @@ public class Game {
         return coins;
     }
 
+    // EFFECTS: adds number of coins
+    public void addCoins(int coins) {
+        this.coins += coins;
+    }
+
     // Rounding modelled from
     // https://stackoverflow.com/questions/153724/how-to-round-a-number-to-n-decimal-places-in-java
     // EFFECTS: returns auto coin speed
     public double getAutoCoinSpeed() {
-        return (double) Math.round(autoPerSec * 10d) / 10d;
+        return (double) Math.round(autoSpeed.getAutoSpeed() * 10d) / 10d;
         //return autoPerSec;
+    }
+
+    // REQUIRES: speed > 0;
+    // MODIFIES: this
+    // EFFECTS: sets auto coin speed
+    public void setAutoCoinSpeed(double speed) {
+//        this.autoPerSec = speed;
+        autoSpeed.setAutoSpeed(speed);
     }
 
     // EFFECTS: returns number of crewMates
     public int getNumberOfCrewMates() {
         return crewMates.size();
+    }
+
+    // EFFECTS: returns crewMates
+    public List<CrewMate> getCrewMates() {
+        return crewMates;
     }
 
     // EFFECTS: returns number of pirates
@@ -93,7 +119,10 @@ public class Game {
             crewMates.add(pirate);
             coins -= piratePrice;
 
-            autoPerSec += 0.1;
+            //autoPerSec += 0.1;
+            double newSpeed = getAutoCoinSpeed() + 0.1;
+            setAutoCoinSpeed(newSpeed);
+
             updateTimerSettings();
 
             //setTimer();
@@ -112,7 +141,10 @@ public class Game {
             crewMates.add(buccaneer);
             coins -= buccaneerPrice;
 
-            autoPerSec += 0.5;
+            //autoPerSec += 0.5;
+            double newSpeed = getAutoCoinSpeed() + 0.5;
+            setAutoCoinSpeed(newSpeed);
+
             updateTimerSettings();
 
             //setTimer();
@@ -140,10 +172,28 @@ public class Game {
             timer.stop();
         }
 
-        double speed = 1 / autoPerSec * 1000;
+        double speed = 1 / autoSpeed.getAutoSpeed() * 1000;
         timerSpeed = (int)Math.round(speed);
 
         setTimer(timerSpeed);
         timer.start();
+    }
+
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("crewMates", crewMatesToJson());
+        json.put("auto", autoSpeed.getAutoSpeed());
+        return json;
+    }
+
+    // EFFECTS: returns things in this game as a JSON array
+    public JSONArray crewMatesToJson() {
+        JSONArray jsonArray = new JSONArray();
+
+        for (CrewMate c : crewMates) {
+            jsonArray.put(c.toJson());
+        }
+        return jsonArray;
     }
 }

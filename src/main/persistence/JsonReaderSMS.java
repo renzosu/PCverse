@@ -1,7 +1,5 @@
 package persistence;
 
-import model.CrewMate;
-import model.Game;
 import model.Message;
 import model.SMS;
 
@@ -15,14 +13,14 @@ import java.util.stream.Stream;
 import org.json.*;
 
 /**
- * Represents a reader that reads workroom from JSON data stored in file
+ * Represents a reader that reads sms from JSON data stored in file
  * Modelled based on JsonSerializationDemo https://github.students.cs.ubc.ca/CPSC210/JsonSerializationDemo.git
  */
-public class JsonReader {
+public class JsonReaderSMS {
     private String source;
 
     // EFFECTS: constructs reader to read from source file
-    public JsonReader(String source) {
+    public JsonReaderSMS(String source) {
         this.source = source;
     }
 
