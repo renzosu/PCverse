@@ -5,7 +5,7 @@ import model.CrewMate;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
- * Tests for Json game reading and writing
+ * Tests for Json Game reading and writing
  * Modelled based on JsonSerializationDemo https://github.students.cs.ubc.ca/CPSC210/JsonSerializationDemo.git
  */
 public class JsonGameTest {

@@ -374,7 +374,6 @@ public class InternalFrame extends JFrame {
 
         private JTextField sendMessageField;
 
-        //private JTextArea textArea;
         private Box box;
 
         private JScrollPane scrollPane;
@@ -419,13 +418,7 @@ public class InternalFrame extends JFrame {
             // Label to display infoLabel
             createInfoLabel(messagingPanel, displayInfoButton);
 
-            // TextArea to display messages
-            //TODO: check accuracy, clean up
-//            textArea = new JTextArea(20, 10);
-//            textArea.setAlignmentX(JPanel.RIGHT_ALIGNMENT);
-//            messagingPanel.add(textArea);
-
-            // Box to display messages
+            // Big Box to display messages
             box = Box.createVerticalBox();
             box.setBounds(50, 100, 700, 380);
             messagingPanel.add(box);
@@ -500,9 +493,10 @@ public class InternalFrame extends JFrame {
                         Message newMessage = new Message(fieldInput);
                         if (!fieldInput.equals("")) {
                             sms.sendMessage(newMessage);
+                            displayMessage(newMessage.getMessage());
                         }
                         sendMessageField.setText("");
-                        displayMessage(box, newMessage.getMessage());
+                        //displayMessage(newMessage.getMessage());
                         // stop the timer
                         ((Timer) e1.getSource()).stop();
                         infoNumLabel.setText(sms.numMessages() + " sent");
@@ -570,8 +564,7 @@ public class InternalFrame extends JFrame {
             return infoPicIcon;
         }
 
-        private void displayMessage(Container box, String message) {
-            //Box wrapper = Box.createHorizontalBox();
+        private void displayMessage(String message) {
             Box wrapper = new Box(getX());
             wrapper.setBounds(new Rectangle(2000, 200));
             wrapper.setAlignmentX(JPanel.RIGHT_ALIGNMENT);
@@ -580,16 +573,14 @@ public class InternalFrame extends JFrame {
         }
 
         private void removeMessage() {
-            int lastMessageIndex = sms.numMessages();
-            if (sms.numMessages() >= 1) {
-                box.remove(lastMessageIndex);
-            } else {
-                box.removeAll();
+            box.removeAll();
+            if (sms.numMessages() == 0) {
+                displayMessage("");
             }
-//            box.removeAll();
-//            for (int i = 1; i <= box.getComponentCount(); i++) {
-//                sms.deleteMessage();
-//            }
+            for (Message m : sms.getMessages()) {
+                displayMessage(m.getMessage());
+            }
+            infoNumLabel.setText(sms.numMessages() + " sent");
         }
 
         private JButton createLoadMessagesButton() {
@@ -600,8 +591,9 @@ public class InternalFrame extends JFrame {
                     box.removeAll();
                     doLoadMessages();
                     for (Message m : sms.getMessages()) {
-                        displayMessage(box, m.getMessage());
+                        displayMessage(m.getMessage());
                     }
+                    infoNumLabel.setText(sms.numMessages() + " sent");
                 }
             });
             loadButton.setBounds(10, 500, 80, 30);

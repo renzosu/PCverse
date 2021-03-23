@@ -10,7 +10,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Tests for the JsonWriter class
+ * Tests for the JsonWriterSMS class
  * Modelled based on JsonSerializationDemo https://github.students.cs.ubc.ca/CPSC210/JsonSerializationDemo.git
  */
 class JsonWriterSMSTest extends JsonSMSTest {
