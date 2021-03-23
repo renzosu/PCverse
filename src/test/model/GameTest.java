@@ -1,5 +1,7 @@
 package model;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -12,10 +14,14 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 public class GameTest {
     private Game game;
+    private CrewMate pirate;
+    private CrewMate buccaneer;
 
     @BeforeEach
     void runBefore() {
         game = new Game();
+        pirate = new CrewMate("pirate");
+        buccaneer = new CrewMate("buccaneer");
     }
 
     @Test
@@ -160,6 +166,20 @@ public class GameTest {
         assertTrue(game.buyBuccaneer());
     }
 
+
+    @Test
+    public void testGetCrewMatesNone() {
+        assertEquals(0, game.getCrewMates().size());
+    }
+
+    @Test
+    public void testGetCrewMatesSome() {
+        game.addCoins(60);
+        game.buyPirate();
+        game.buyBuccaneer();
+        assertEquals(2, game.getCrewMates().size());
+    }
+
     @Test
     public void testSetTimer() {
         for (int i = 1; i <= 10; i++) {
@@ -175,5 +195,25 @@ public class GameTest {
         game.setTimer((int)Math.round(1 / 0.2 * 1000));
 
         assertEquals(5000, game.getTimerSpeed());
+    }
+
+    @Test
+    void testMessagesToJson() {
+        JSONArray jsonArray = new JSONArray();
+        jsonArray.put(pirate.toJson());
+        jsonArray.put(buccaneer.toJson());
+        game.addCoins(10);
+        game.buyPirate();
+        game.addCoins(50);
+        game.buyBuccaneer();
+        assertEquals(jsonArray.length(), game.crewMatesToJson().length());
+    }
+
+    @Test
+    void testToJson() {
+        JSONObject json = new JSONObject();
+        json.put("crewMates", game.crewMatesToJson());
+        json.put("auto", game.autoSpeed.getAutoSpeed());
+        assertEquals(json.length(), game.toJson().length());
     }
 }

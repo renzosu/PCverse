@@ -2,7 +2,8 @@
     "crewMates": [
         {"name": "pirate"},
         {"name": "buccaneer"},
+        {"name": "pirate"},
         {"name": "pirate"}
     ],
-    "auto": 0.7
+    "auto": 0.7999999999999999
 }

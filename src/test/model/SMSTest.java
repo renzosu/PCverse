@@ -89,7 +89,6 @@ public class SMSTest {
 
     @Test
     void testToJson() {
-        sms.sendMessage(m1);
         JSONObject json = new JSONObject();
         json.put("messages", sms.messagesToJson());
         assertEquals(json.length(), sms.toJson().length());

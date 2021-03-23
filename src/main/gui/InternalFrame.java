@@ -9,20 +9,29 @@ import persistence.JsonWriterGame;
 import persistence.JsonWriterSMS;
 
 import javax.swing.*;
+import javax.swing.event.InternalFrameAdapter;
+import javax.swing.event.InternalFrameEvent;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public class InternalFrame extends JFrame {
 
     JDesktopPane desktopPane = new JDesktopPane();
-    JInternalFrame gameIntFrame = new JInternalFrame("Ahoy Treasure Game");
-    JInternalFrame messagingIntFrame = new JInternalFrame("Oasis SMS");
 
-    GamePanel gp = new GamePanel();
-    MessagingPanel mp = new MessagingPanel();
+    JInternalFrame gameIntFrame;
+    JInternalFrame messagingIntFrame;
+    //JInternalFrame gameIntFrame = new JInternalFrame("Ahoy Treasure Game");
+    //JInternalFrame messagingIntFrame = new JInternalFrame("Oasis SMS");
+
+    GamePanel gp;
+    MessagingPanel mp;
+    //GamePanel gp = new GamePanel();
+    //MessagingPanel mp = new MessagingPanel();
 
     private static final String JSON_STORE_SMS = "./data/SMS.json";
     private static final String JSON_STORE_GAME = "./data/Game.json";
@@ -38,21 +47,78 @@ public class InternalFrame extends JFrame {
         jsonWriterGame = new JsonWriterGame(JSON_STORE_GAME);
         jsonReaderGame = new JsonReaderGame(JSON_STORE_GAME);
 
-        gameIntFrame.setLocation(50, 50);
-        gameIntFrame.setSize(800, 600);
-        gameIntFrame.setVisible(true);
-        gameIntFrame.setIconifiable(true);
+//        gameIntFrame.setLocation(50, 50);
+//        gameIntFrame.setSize(800, 600);
+//        gameIntFrame.setVisible(true);
+//        gameIntFrame.setIconifiable(true);
+//        gameIntFrame.setClosable(true);
 
-        messagingIntFrame.setLocation(900, 50);
-        messagingIntFrame.setSize(800, 600);
-        messagingIntFrame.setVisible(true);
-        messagingIntFrame.setIconifiable(true);
+//        messagingIntFrame.setLocation(900, 50);
+//        messagingIntFrame.setSize(800, 600);
+//        messagingIntFrame.setVisible(true);
+//        messagingIntFrame.setIconifiable(true);
+//        messagingIntFrame.setClosable(true);
 
-        desktopPane.add(gameIntFrame);
-        desktopPane.add(messagingIntFrame);
+        //desktopPane.add(gameIntFrame);
+        //desktopPane.add(messagingIntFrame);
         desktopPane.setBackground(Color.PINK);
+
+        // Button for opening GameFrame
+        JButton openGameFrameButton = createOpenGameFrameButton();
+        desktopPane.add(openGameFrameButton);
+
+        // Button for opening MessagingFrame
+        JButton openMessagingFrameButton = createOpenMessagingFrameButton();
+        desktopPane.add(openMessagingFrameButton);
+
         add(desktopPane);
     }
+
+    private JButton createOpenGameFrameButton() {
+        JButton openGameFrameButton = new JButton("Game");
+        openGameFrameButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                gameIntFrame = new JInternalFrame("Ahoy Treasure Game");
+
+                gameIntFrame.setLocation(50, 50);
+                gameIntFrame.setSize(800, 600);
+                gameIntFrame.setVisible(true);
+                gameIntFrame.setIconifiable(true);
+                gameIntFrame.setClosable(true);
+
+                gp = new GamePanel();
+
+                desktopPane.add(gameIntFrame);
+            }
+        });
+        openGameFrameButton.setBounds(50, 50, 160, 30);
+        return openGameFrameButton;
+    }
+
+    private JButton createOpenMessagingFrameButton() {
+        JButton openMessagingFrameButton = new JButton("SMS");
+        openMessagingFrameButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                messagingIntFrame = new JInternalFrame("Oasis SMS");
+
+                messagingIntFrame.setLocation(900, 50);
+                messagingIntFrame.setSize(800, 600);
+                messagingIntFrame.setVisible(true);
+                messagingIntFrame.setIconifiable(true);
+                messagingIntFrame.setClosable(true);
+
+                mp = new MessagingPanel();
+
+                desktopPane.add(messagingIntFrame);
+            }
+        });
+        openMessagingFrameButton.setBounds(50, 100, 160, 30);
+        return openMessagingFrameButton;
+    }
+
+
 
     public class GamePanel extends JPanel {
 
@@ -429,7 +495,31 @@ public class InternalFrame extends JFrame {
             // Buttons for loading and saving messages
             makeLoadSaveMessagesButton(messagingPanel);
 
+            // InternalFrameListener for closing messagingIntFrame
+            messagingIntFrame.addInternalFrameListener(new InternalFrameAdapter() {
+                @Override
+                public void internalFrameClosing(InternalFrameEvent e) {
+                    super.internalFrameClosing(e);
+                    windowCloseMethod(messagingIntFrame);
+                }
+            });
+
             messagingIntFrame.add(messagingPanel);
+        }
+
+        private void windowCloseMethod(JInternalFrame frame) {
+            int result = JOptionPane.showConfirmDialog(frame, "Do you want to save messages?",
+                    "Select an option", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
+            if (result == JOptionPane.OK_OPTION) {
+                doSaveMessages();
+                setVisible(false);
+                frame.dispose();
+            } else if (result == JOptionPane.NO_OPTION) {
+                setVisible(false);
+                frame.dispose();
+            } else if (result == JOptionPane.CANCEL_OPTION) {
+                setVisible(true);
+            }
         }
 
         private void makeLoadSaveMessagesButton(JPanel messagingPanel) {
