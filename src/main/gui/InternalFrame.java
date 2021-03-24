@@ -14,24 +14,18 @@ import javax.swing.event.InternalFrameEvent;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public class InternalFrame extends JFrame {
 
-    JDesktopPane desktopPane = new JDesktopPane();
+    JDesktopPane desktopPane;
 
     JInternalFrame gameIntFrame;
     JInternalFrame messagingIntFrame;
-    //JInternalFrame gameIntFrame = new JInternalFrame("Ahoy Treasure Game");
-    //JInternalFrame messagingIntFrame = new JInternalFrame("Oasis SMS");
 
     GamePanel gp;
     MessagingPanel mp;
-    //GamePanel gp = new GamePanel();
-    //MessagingPanel mp = new MessagingPanel();
 
     private static final String JSON_STORE_SMS = "./data/SMS.json";
     private static final String JSON_STORE_GAME = "./data/Game.json";
@@ -47,21 +41,15 @@ public class InternalFrame extends JFrame {
         jsonWriterGame = new JsonWriterGame(JSON_STORE_GAME);
         jsonReaderGame = new JsonReaderGame(JSON_STORE_GAME);
 
-//        gameIntFrame.setLocation(50, 50);
-//        gameIntFrame.setSize(800, 600);
-//        gameIntFrame.setVisible(true);
-//        gameIntFrame.setIconifiable(true);
-//        gameIntFrame.setClosable(true);
+        ImageIcon desktopIcon = new ImageIcon("./data/desktopPic.jpg");
+        Image desktopImage = desktopIcon.getImage();
 
-//        messagingIntFrame.setLocation(900, 50);
-//        messagingIntFrame.setSize(800, 600);
-//        messagingIntFrame.setVisible(true);
-//        messagingIntFrame.setIconifiable(true);
-//        messagingIntFrame.setClosable(true);
-
-        //desktopPane.add(gameIntFrame);
-        //desktopPane.add(messagingIntFrame);
-        desktopPane.setBackground(Color.PINK);
+        desktopPane = new JDesktopPane() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                g.drawImage(desktopImage, 0, 0, getWidth(), getHeight(), this);
+            }
+        };
 
         // Button for opening GameFrame
         JButton openGameFrameButton = createOpenGameFrameButton();
@@ -75,13 +63,18 @@ public class InternalFrame extends JFrame {
     }
 
     private JButton createOpenGameFrameButton() {
-        JButton openGameFrameButton = new JButton("Game");
+        ImageIcon openGameFrameIcon = new ImageIcon("./data/gamePic.png");
+        Image openGameFrameImage = openGameFrameIcon.getImage().getScaledInstance(100, 100,
+                Image.SCALE_SMOOTH);
+        openGameFrameIcon = new ImageIcon(openGameFrameImage);
+
+        JButton openGameFrameButton = new JButton(openGameFrameIcon);
         openGameFrameButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 gameIntFrame = new JInternalFrame("Ahoy Treasure Game");
 
-                gameIntFrame.setLocation(50, 50);
+                gameIntFrame.setLocation(50, 200);
                 gameIntFrame.setSize(800, 600);
                 gameIntFrame.setVisible(true);
                 gameIntFrame.setIconifiable(true);
@@ -92,18 +85,25 @@ public class InternalFrame extends JFrame {
                 desktopPane.add(gameIntFrame);
             }
         });
-        openGameFrameButton.setBounds(50, 50, 160, 30);
+        openGameFrameButton.setBorder(BorderFactory.createEmptyBorder());
+        openGameFrameButton.setContentAreaFilled(false);
+        openGameFrameButton.setBounds(50, 50, 100, 100);
         return openGameFrameButton;
     }
 
     private JButton createOpenMessagingFrameButton() {
-        JButton openMessagingFrameButton = new JButton("SMS");
+        ImageIcon openMessagingFrameIcon = new ImageIcon("./data/smsPic.png");
+        Image openMessagingImage = openMessagingFrameIcon.getImage().getScaledInstance(100, 100,
+                Image.SCALE_SMOOTH);
+        openMessagingFrameIcon = new ImageIcon(openMessagingImage);
+
+        JButton openMessagingFrameButton = new JButton(openMessagingFrameIcon);
         openMessagingFrameButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 messagingIntFrame = new JInternalFrame("Oasis SMS");
 
-                messagingIntFrame.setLocation(900, 50);
+                messagingIntFrame.setLocation(900, 200);
                 messagingIntFrame.setSize(800, 600);
                 messagingIntFrame.setVisible(true);
                 messagingIntFrame.setIconifiable(true);
@@ -114,10 +114,11 @@ public class InternalFrame extends JFrame {
                 desktopPane.add(messagingIntFrame);
             }
         });
-        openMessagingFrameButton.setBounds(50, 100, 160, 30);
+        openMessagingFrameButton.setBorder(BorderFactory.createEmptyBorder());
+        openMessagingFrameButton.setContentAreaFilled(false);
+        openMessagingFrameButton.setBounds(200, 50, 100, 100);
         return openMessagingFrameButton;
     }
-
 
 
     public class GamePanel extends JPanel {
@@ -137,10 +138,9 @@ public class InternalFrame extends JFrame {
         private JLabel autoLabel;
 
         public GamePanel()  {
-            JPanel gamePanel = new JPanel();
-            gamePanel.setLayout(null);
-            gamePanel.setBackground(new Color(102, 255, 102));
 
+            // JPanel for gameIntFrame
+            JPanel gamePanel = createGameJPanel();
             game = new Game();
 
             // Icon for treasure chest
@@ -198,6 +198,20 @@ public class InternalFrame extends JFrame {
             updateCoins();
 
             gameIntFrame.add(gamePanel);
+        }
+
+        private JPanel createGameJPanel() {
+            ImageIcon gameBackgroundIcon = new ImageIcon("./data/gameBackgroundPic.png");
+            Image gameBackgroundImage = gameBackgroundIcon.getImage();
+
+            JPanel gamePanel = new JPanel() {
+                @Override
+                protected void paintComponent(Graphics g) {
+                    g.drawImage(gameBackgroundImage, 0, 0, getWidth(), getHeight(), this);
+                }
+            };
+            gamePanel.setLayout(null);
+            return gamePanel;
         }
 
         private void makeLoadSaveGameButtons(JPanel gamePanel) {
@@ -270,7 +284,7 @@ public class InternalFrame extends JFrame {
         private void createPirateNumLabel() {
             pirateNumLabel = new JLabel("0");
             pirateNumLabel.setBounds(80, 80, 200, 100);
-            pirateNumLabel.setForeground(new Color(112, 212, 157));
+            pirateNumLabel.setForeground(new Color(67, 229, 229));
             Font pirateFont = new Font("font1", Font.BOLD, 30);
             pirateNumLabel.setFont(pirateFont);
         }
@@ -304,7 +318,7 @@ public class InternalFrame extends JFrame {
         private void createBuccaneerNumLabel() {
             buccaneerNumLabel = new JLabel("0");
             buccaneerNumLabel.setBounds(80, 130, 200, 100);
-            buccaneerNumLabel.setForeground(new Color(77, 171, 232));
+            buccaneerNumLabel.setForeground(new Color(133, 222, 81));
             Font buccaneerFont = new Font("font1", Font.BOLD, 30);
             buccaneerNumLabel.setFont(buccaneerFont);
         }
@@ -337,7 +351,7 @@ public class InternalFrame extends JFrame {
         private void createAutoNumLabel() {
             autoNumLabel = new JLabel("0.0");
             autoNumLabel.setBounds(80, 0, 200, 100);
-            autoNumLabel.setForeground(new Color(222, 50, 47));
+            autoNumLabel.setForeground(new Color(243, 104, 16));
             Font autoFont = new Font("font1", Font.BOLD, 30);
             autoNumLabel.setFont(autoFont);
         }
@@ -445,10 +459,9 @@ public class InternalFrame extends JFrame {
         private JScrollPane scrollPane;
 
         public MessagingPanel() {
-            JPanel messagingPanel = new JPanel();
-            messagingPanel.setLayout(null);
-            messagingPanel.setBackground(new Color(51, 204, 255));
 
+            // JPanel for messagingIntFrame
+            JPanel messagingPanel = createMessagingJPanel();
             sms = new SMS();
 
             // Icon for partner
@@ -475,14 +488,11 @@ public class InternalFrame extends JFrame {
             // Icon for info
             ImageIcon infoPicIcon = createInfoPicIcon();
 
-            // Button for displaying infoNum
-            JButton displayInfoButton = createDisplayInfoButton(infoPicIcon);
-
             // Label to display infoNumLabel
             createInfoNumLabel();
 
             // Label to display infoLabel
-            createInfoLabel(messagingPanel, displayInfoButton);
+            createInfoLabel(messagingPanel, infoPicIcon);
 
             // Big Box to display messages
             box = Box.createVerticalBox();
@@ -493,9 +503,29 @@ public class InternalFrame extends JFrame {
             createScrollPane(messagingPanel, box);
 
             // Buttons for loading and saving messages
-            makeLoadSaveMessagesButton(messagingPanel);
+            makeLoadSaveMessagesButtons(messagingPanel);
 
             // InternalFrameListener for closing messagingIntFrame
+            addMessagingClosingListener();
+
+            messagingIntFrame.add(messagingPanel);
+        }
+
+        private JPanel createMessagingJPanel() {
+            ImageIcon messagingBackgroundIcon = new ImageIcon("./data/messagingBackgroundPic.jpg");
+            Image messagingBackgroundImage = messagingBackgroundIcon.getImage();
+
+            JPanel messagingPanel = new JPanel() {
+                @Override
+                protected void paintComponent(Graphics g) {
+                    g.drawImage(messagingBackgroundImage, 0, 0, getWidth(), getHeight(), this);
+                }
+            };
+            messagingPanel.setLayout(null);
+            return messagingPanel;
+        }
+
+        private void addMessagingClosingListener() {
             messagingIntFrame.addInternalFrameListener(new InternalFrameAdapter() {
                 @Override
                 public void internalFrameClosing(InternalFrameEvent e) {
@@ -503,8 +533,6 @@ public class InternalFrame extends JFrame {
                     windowCloseMethod(messagingIntFrame);
                 }
             });
-
-            messagingIntFrame.add(messagingPanel);
         }
 
         private void windowCloseMethod(JInternalFrame frame) {
@@ -522,7 +550,7 @@ public class InternalFrame extends JFrame {
             }
         }
 
-        private void makeLoadSaveMessagesButton(JPanel messagingPanel) {
+        private void makeLoadSaveMessagesButtons(JPanel messagingPanel) {
             // Button for loading messages
             JButton loadMessagesButton = createLoadMessagesButton();
             messagingPanel.add(loadMessagesButton);
@@ -541,7 +569,6 @@ public class InternalFrame extends JFrame {
             messagingPanel.add(scrollPane);
         }
 
-
         private void createPartnerLabel(JPanel messagingPanel, ImageIcon partnerPicIcon) {
             partnerLabel = new JLabel();
             partnerLabel.setIcon(partnerPicIcon);
@@ -554,7 +581,7 @@ public class InternalFrame extends JFrame {
         private void createPartnerNameLabel() {
             partnerNameLabel = new JLabel("John Doe");
             partnerNameLabel.setBounds(80, 0, 200, 100);
-            partnerNameLabel.setForeground(new Color(65, 117, 215));
+            partnerNameLabel.setForeground(new Color(46, 186, 178));
             Font autoFont = new Font("font1", Font.BOLD, 30);
             partnerNameLabel.setFont(autoFont);
         }
@@ -606,36 +633,19 @@ public class InternalFrame extends JFrame {
             return sendMessageField;
         }
 
-        private JButton createDisplayInfoButton(ImageIcon infoPicIcon) {
-            JButton displayInfoButton = new JButton(infoPicIcon);
-//            displayInfoButton.addActionListener(e -> {
-//                int delayTime = 500;
-//                new Timer(delayTime, e1 -> {
-//                    infoNumLabel.setText("");
-//                    // stop the timer
-//                    ((Timer) e1.getSource()).stop();
-//                }).start();
-//                infoNumLabel.setText(sms.numMessages() + " sent");
-//            });
-            displayInfoButton.setBorder(BorderFactory.createEmptyBorder());
-            displayInfoButton.setContentAreaFilled(false);
-            displayInfoButton.setBounds(700, 30, 50, 50);
-            return displayInfoButton;
-        }
-
-        private void createInfoLabel(JPanel messagingPanel, JButton displayInfoButton) {
+        private void createInfoLabel(JPanel messagingPanel, ImageIcon infoPicIcon) {
             infoLabel = new JLabel();
+            infoLabel.setIcon(infoPicIcon);
             infoLabel.setBounds(700, 30, 50, 50);
 
-            messagingPanel.add(displayInfoButton);
             messagingPanel.add(infoNumLabel);
             messagingPanel.add(infoLabel);
         }
 
         private void createInfoNumLabel() {
             infoNumLabel = new JLabel("");
-            infoNumLabel.setBounds(630, 10, 75, 75);
-            infoNumLabel.setForeground(new Color(0, 0, 0));
+            infoNumLabel.setBounds(630, 15, 75, 75);
+            infoNumLabel.setForeground(new Color(73, 69, 69, 255));
             Font autoFont = new Font("font1", Font.PLAIN, 20);
             infoNumLabel.setFont(autoFont);
         }
