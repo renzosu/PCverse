@@ -88,7 +88,7 @@ public class GameTest {
 
     @Test
     public void testGetNumberOfPiratesMixedOne() {
-        for (int i = 1; i <= 40; i++) {
+        for (int i = 1; i <= 60; i++) {
             game.tapTreasure();
         }
         game.buyBuccaneer();
@@ -99,7 +99,7 @@ public class GameTest {
 
     @Test
     public void testGetNumberOfPiratesSome() {
-        for (int i = 1; i <= 40; i++) {
+        for (int i = 1; i <= 20; i++) {
             game.tapTreasure();
         }
         game.buyPirate();
@@ -166,7 +166,6 @@ public class GameTest {
         assertTrue(game.buyBuccaneer());
     }
 
-
     @Test
     public void testGetCrewMatesNone() {
         assertEquals(0, game.getCrewMates().size());
@@ -197,6 +196,22 @@ public class GameTest {
     }
 
     @Test
+    public void testUpdateTimerSettings() {
+        for (int i = 1; i <= 10; i++) {
+            game.tapTreasure();
+        }
+        game.buyPirate();
+
+        assertEquals(10000, game.getTimerSpeed());
+
+        game.setAutoCoinSpeed(0.2);
+        game.updateTimerSettings();
+
+        assertEquals(5000, game.getTimerSpeed());
+    }
+
+
+    @Test
     void testMessagesToJson() {
         JSONArray jsonArray = new JSONArray();
         jsonArray.put(pirate.toJson());
@@ -212,7 +227,6 @@ public class GameTest {
     void testToJson() {
         JSONObject json = new JSONObject();
         json.put("crewMates", game.crewMatesToJson());
-        //json.put("auto", game.autoSpeed.getAutoSpeed());
         json.put("auto", game.getAutoCoinSpeed());
         assertEquals(json.length(), game.toJson().length());
     }
