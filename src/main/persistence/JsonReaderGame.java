@@ -9,8 +9,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.stream.Stream;
 
-import model.Message;
-import model.SMS;
 import org.json.*;
 
 /**
@@ -66,12 +64,6 @@ public class JsonReaderGame {
     // MODIFIES: sms
     // EFFECTS: parses crewMate from JSON object and adds it to Game
     private void addCrewMate(Game game, JSONObject jsonObject) {
-        //String stringPirate = jsonObject.getString("pirate");
-        //String stringBuccaneer = jsonObject.getString("buccaneer");
-
-        //CrewMate pirate = new CrewMate(jsonObject.getString("pirate"));
-        //CrewMate buccaneer = new CrewMate(jsonObject.getString("buccaneer"));
-
         String name = jsonObject.getString("name");
         CrewMate crewMate = new CrewMate(name);
         if (name.equals("pirate")) {
@@ -82,25 +74,6 @@ public class JsonReaderGame {
             game.addCoins(50);
             game.buyBuccaneer();
         }
-
-        //game.getCrewMates().add(crewMate);
-
-//        if (crewMate.getCrewMate().equals("pirate")) {
-//            game.buyPirate();
-//        }
-//
-//        if (crewMate.getCrewMate().equals("buccaneer")) {
-//            game.buyBuccaneer();
-//        }
-
-//        CrewMate pirate = new CrewMate(stringPirate);
-//        CrewMate buccaneer = new CrewMate(stringBuccaneer);
-//        if (pirate.getCrewMate().equals(stringPirate)) {
-//            game.buyPirate();
-//        }
-//        if (buccaneer.getCrewMate().equals(stringBuccaneer)) {
-//            game.buyBuccaneer();
-//        }
     }
 }
 

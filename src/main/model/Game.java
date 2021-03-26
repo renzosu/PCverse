@@ -13,7 +13,7 @@ import java.util.List;
  */
 public class Game implements Writable {
     protected int coins;
-    private final int piratePrice;
+    private int piratePrice;
     private int buccaneerPrice;
 
     private List<CrewMate> crewMates;
@@ -23,14 +23,13 @@ public class Game implements Writable {
     protected Timer timer;
     protected int timerSpeed;
 
-    protected AutoSpeed autoSpeed;
-    //protected double autoPerSec;
+    protected double autoSpeed;
 
     private boolean timerOn;
 
     // EFFECTS: initializes a Game app
     public Game() {
-        autoSpeed = new AutoSpeed(0.0);
+        autoSpeed = 0.0;
         coins = 0;
         crewMates = new ArrayList<>();
 
@@ -56,16 +55,14 @@ public class Game implements Writable {
     // https://stackoverflow.com/questions/153724/how-to-round-a-number-to-n-decimal-places-in-java
     // EFFECTS: returns auto coin speed
     public double getAutoCoinSpeed() {
-        return (double) Math.round(autoSpeed.getAutoSpeed() * 10d) / 10d;
-        //return autoPerSec;
+        return (double) Math.round(autoSpeed * 10d) / 10d;
     }
 
     // REQUIRES: speed > 0;
     // MODIFIES: this
     // EFFECTS: sets auto coin speed
     public void setAutoCoinSpeed(double speed) {
-//        this.autoPerSec = speed;
-        autoSpeed.setAutoSpeed(speed);
+        this.autoSpeed = speed;
     }
 
     // EFFECTS: returns number of crewMates
@@ -119,14 +116,10 @@ public class Game implements Writable {
             crewMates.add(pirate);
             coins -= piratePrice;
 
-            //autoPerSec += 0.1;
-            double newSpeed = getAutoCoinSpeed() + 0.1;
-            setAutoCoinSpeed(newSpeed);
+            autoSpeed += 0.1;
 
             updateTimerSettings();
 
-            //setTimer();
-            //timer.start();
             return true;
         } else {
             return false;
@@ -141,14 +134,10 @@ public class Game implements Writable {
             crewMates.add(buccaneer);
             coins -= buccaneerPrice;
 
-            //autoPerSec += 0.5;
-            double newSpeed = getAutoCoinSpeed() + 0.5;
-            setAutoCoinSpeed(newSpeed);
+            autoSpeed += 0.5;
 
             updateTimerSettings();
 
-            //setTimer();
-            //timer.start();
             return true;
         } else {
             return false;
@@ -172,7 +161,7 @@ public class Game implements Writable {
             timer.stop();
         }
 
-        double speed = 1 / autoSpeed.getAutoSpeed() * 1000;
+        double speed = 1 / autoSpeed * 1000;
         timerSpeed = (int)Math.round(speed);
 
         setTimer(timerSpeed);
@@ -183,7 +172,7 @@ public class Game implements Writable {
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
         json.put("crewMates", crewMatesToJson());
-        json.put("auto", autoSpeed.getAutoSpeed());
+        json.put("auto", autoSpeed);
         return json;
     }
 

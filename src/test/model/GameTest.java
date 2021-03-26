@@ -189,8 +189,7 @@ public class GameTest {
 
         assertEquals(10000, game.getTimerSpeed());
 
-        //game.autoSpeed = 0.2;
-        game.autoSpeed.setAutoSpeed(0.2);
+        game.setAutoCoinSpeed(0.2);
         game.timerSpeed = (int)Math.round(1 / 0.2 * 1000);
         game.setTimer((int)Math.round(1 / 0.2 * 1000));
 
@@ -213,7 +212,8 @@ public class GameTest {
     void testToJson() {
         JSONObject json = new JSONObject();
         json.put("crewMates", game.crewMatesToJson());
-        json.put("auto", game.autoSpeed.getAutoSpeed());
+        //json.put("auto", game.autoSpeed.getAutoSpeed());
+        json.put("auto", game.getAutoCoinSpeed());
         assertEquals(json.length(), game.toJson().length());
     }
 }

@@ -8,7 +8,6 @@ import persistence.Writable;
  */
 public class CrewMate implements Writable {
     private String crewMate;
-    private Game game;
 
     // EFFECTS: initializes a crewMate and its identifier
     public CrewMate(String crewMate) {
