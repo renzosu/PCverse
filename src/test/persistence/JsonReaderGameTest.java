@@ -28,7 +28,7 @@ class JsonReaderGameTest extends JsonGameTest {
     }
 
     @Test
-    void testReaderEmptyWorkRoom() {
+    void testReaderEmptyGame() {
         JsonReaderGame reader = new JsonReaderGame("./data/testReaderGameEmptyGame.json");
         try {
             Game game = reader.read();
@@ -39,7 +39,7 @@ class JsonReaderGameTest extends JsonGameTest {
     }
 
     @Test
-    void testReaderGeneralWorkRoom() {
+    void testReaderGeneralGame() {
         JsonReaderGame reader = new JsonReaderGame("./data/testReaderGameGeneralGame.json");
         try {
             Game game = reader.read();

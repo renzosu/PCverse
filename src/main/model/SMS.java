@@ -1,5 +1,6 @@
 package model;
 
+import exceptions.EmptyMessageException;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import persistence.Writable;
@@ -24,8 +25,14 @@ public class SMS implements Writable {
     }
 
     // MODIFIES: this
-    // EFFECTS: adds a message to SMS's list of messages
-    public void sendMessage(Message m) {
+    // EFFECTS: IF m is empty
+    //              throw EmptyMessageException
+    //          OTHERWISE
+    //              adds a message to SMS's list of messages
+    public void sendMessage(Message m) throws EmptyMessageException {
+        if (m.getMessage().equals("")) {
+            throw new EmptyMessageException("Message is empty!");
+        }
         messages.add(m);
     }
 

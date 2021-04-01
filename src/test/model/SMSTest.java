@@ -1,5 +1,6 @@
 package model;
 
+import exceptions.EmptyMessageException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -13,29 +14,54 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 public class SMSTest {
     private SMS sms;
+    private Message m0;
     private Message m1;
     private Message m2;
 
     @BeforeEach
     public void runBefore() {
         sms = new SMS();
+        m0 = new Message("");
         m1 = new Message("Hello");
         m2 = new Message("Goodbye");
     }
 
     @Test
     public void testGetMessages() {
-        sms.sendMessage(m1);
+        try {
+            sms.sendMessage(m1);
+            // expected behaviour
+        } catch (EmptyMessageException e) {
+            fail("should not have thrown");
+        }
         assertEquals(1, sms.getMessages().size());
         assertEquals("Hello", sms.getMessages().get(0).getMessage());
     }
 
     @Test
-    public void testSendMessage() {
-        sms.sendMessage(m1);
+    public void testSendMessageEmptyMessage() {
+        try {
+            sms.sendMessage(m0);
+            fail("should have thrown IllegalArgumentException");
+        } catch (EmptyMessageException e) {
+            System.err.println("Message contents cannot be empty!");
+            // expected behaviour
+        }
+        assertEquals(0, sms.numMessages());
+    }
+
+    @Test
+    public void testSendMessageNonEmptyMessage() {
+        try {
+            sms.sendMessage(m1);
+            // expected behaviour
+        } catch (EmptyMessageException e) {
+            fail("should not have thrown");
+        }
         assertEquals(1, sms.numMessages());
         assertEquals("Hello", m1.getMessage());
     }
+
 
     @Test
     public void testDeleteMessageFailure() {
@@ -45,8 +71,18 @@ public class SMSTest {
 
     @Test
     public void testDeleteMessageSuccess() {
-        sms.sendMessage(m1);
-        sms.sendMessage(m2);
+        try {
+            sms.sendMessage(m1);
+            // expected behaviour
+        } catch (EmptyMessageException e) {
+            fail("should not have thrown");
+        }
+        try {
+            sms.sendMessage(m2);
+            // expected behaviour
+        } catch (EmptyMessageException e) {
+            fail("should not have thrown");
+        }
         assertEquals(2, sms.numMessages());
         sms.deleteMessage();
         assertEquals(1, sms.numMessages());
@@ -59,8 +95,18 @@ public class SMSTest {
 
     @Test
     public void testDisplayMessagesSome() {
-        sms.sendMessage(m1);
-        sms.sendMessage(m2);
+        try {
+            sms.sendMessage(m1);
+            // expected behaviour
+        } catch (EmptyMessageException e) {
+            fail("should not have thrown");
+        }
+        try {
+            sms.sendMessage(m2);
+            // expected behaviour
+        } catch (EmptyMessageException e) {
+            fail("should not have thrown");
+        }
         assertEquals("\nHello\nGoodbye\n", sms.displayMessages());
         sms.deleteMessage();
         assertEquals("\nHello\n", sms.displayMessages());
@@ -73,7 +119,12 @@ public class SMSTest {
 
     @Test
     public void testNumMessagesSome() {
-        sms.sendMessage(m1);
+        try {
+            sms.sendMessage(m1);
+            // expected behaviour
+        } catch (EmptyMessageException e) {
+            fail("should not have thrown");
+        }
         assertEquals(1, sms.numMessages());
         sms.deleteMessage();
         assertEquals(0, sms.numMessages());
@@ -83,7 +134,11 @@ public class SMSTest {
     void testMessagesToJson() {
         JSONArray jsonArray = new JSONArray();
         jsonArray.put(m1.toJson());
-        sms.sendMessage(m1);
+        try {
+            sms.sendMessage(m1);
+        } catch (EmptyMessageException e) {
+            e.printStackTrace();
+        }
         assertEquals(jsonArray.length(), sms.messagesToJson().length());
     }
 

@@ -1,5 +1,6 @@
 package gui;
 
+import exceptions.EmptyMessageException;
 import model.Game;
 import model.Message;
 import model.SMS;
@@ -749,23 +750,24 @@ public class InternalFrame extends JFrame {
          */
         private JButton createSendMessageButton() {
             JButton sendMessageButton = new JButton("Send");
-            sendMessageButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    int delayTime = 1 / 1000;
-                    new Timer(delayTime, e1 -> {
-                        String fieldInput = sendMessageField.getText();
-                        Message newMessage = new Message(fieldInput);
-                        if (!fieldInput.equals("")) {
+            sendMessageButton.addActionListener(e -> {
+                int delayTime = 1 / 1000;
+                new Timer(delayTime, e1 -> {
+                    String fieldInput = sendMessageField.getText();
+                    Message newMessage = new Message(fieldInput);
+                    if (!fieldInput.equals("")) {
+                        try {
                             sms.sendMessage(newMessage);
-                            displayMessage(newMessage.getMessage());
+                        } catch (EmptyMessageException exception) {
+                            System.err.println("MESSAGE CONTENTS CANNOT BE EMPTY!");
                         }
-                        sendMessageField.setText("");
-                        // stop the timer
-                        ((Timer) e1.getSource()).stop();
-                        infoNumLabel.setText(sms.numMessages() + " sent");
-                    }).start();
-                }
+                        displayMessage(newMessage.getMessage());
+                    }
+                    sendMessageField.setText("");
+                    // stop the timer
+                    ((Timer) e1.getSource()).stop();
+                    infoNumLabel.setText(sms.numMessages() + " sent");
+                }).start();
             });
             sendMessageButton.setBounds(680, 500, 80, 30);
             return sendMessageButton;

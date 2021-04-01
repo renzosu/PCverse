@@ -25,3 +25,15 @@ In the context of a PC model:
 - As a user, I want to be able to save my messages in my SMS.
 - As a user, I want to be able to load my messages in my SMS.
 - As a user, I want to be prompted to save when leaving my SMS.
+
+## Phase 4: Task 2
+
+I have chosen to test and design the SMS class such that it is robust:
+ 
+- SMS's method with the signature sendMessage(String message) will throw a newly-designed checked exception called 
+EmptyMessageException when a Message with empty contents is trying to be sent.
+- SMSTest accounts for this new design change and tests to check for the correct behaviour: 
+catching EmptyMessageException when attempting to send an empty message (expected), and not catching it when sending a 
+non-empty message (unexpected).
+- Other subsequent uses of the sendMessage method surround it with try/catch statements to ensure correct behaviour or
+save us from crashing when trying to send an empty Message in JsonWriterSMSTest, JsonReaderSMS, PC, and InternalFrame.

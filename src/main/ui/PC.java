@@ -1,5 +1,6 @@
 package ui;
 
+import exceptions.EmptyMessageException;
 import model.Game;
 import model.Message;
 import model.SMS;
@@ -207,7 +208,11 @@ public class PC {
         input += scan.nextLine();
         Message newMessage = new Message(input);
 
-        sms.sendMessage(newMessage);
+        try {
+            sms.sendMessage(newMessage);
+        } catch (EmptyMessageException exception) {
+            System.err.println("MESSAGE CONTENTS CANNOT BE EMPTY!");
+        }
     }
 
     // MODIFIES: this

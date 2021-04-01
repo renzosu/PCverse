@@ -1,5 +1,6 @@
 package persistence;
 
+import exceptions.EmptyMessageException;
 import model.Message;
 import model.SMS;
 
@@ -65,6 +66,10 @@ public class JsonReaderSMS {
     private void addMessage(SMS sms, JSONObject jsonObject) {
         String name = jsonObject.getString("message");
         Message message = new Message(name);
-        sms.sendMessage(message);
+        try {
+            sms.sendMessage(message);
+        } catch (EmptyMessageException exception) {
+            System.err.println("MESSAGE CONTENTS CANNOT BE EMPTY!");
+        }
     }
 }

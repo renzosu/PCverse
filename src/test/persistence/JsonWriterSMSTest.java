@@ -1,5 +1,6 @@
 package persistence;
 
+import exceptions.EmptyMessageException;
 import model.Message;
 import model.SMS;
 import org.junit.jupiter.api.Test;
@@ -51,8 +52,19 @@ class JsonWriterSMSTest extends JsonSMSTest {
     void testWriterGeneralSMS() {
         try {
             SMS sms = new SMS();
-            sms.sendMessage(new Message("I have to go."));
-            sms.sendMessage(new Message("See you next time!"));
+
+            try {
+                sms.sendMessage(new Message("I have to go."));
+            } catch (EmptyMessageException exception) {
+                System.err.println("MESSAGE CONTENTS CANNOT BE EMPTY!");
+            }
+
+            try {
+                sms.sendMessage(new Message("See you next time!"));
+            } catch (EmptyMessageException exception) {
+                System.err.println("MESSAGE CONTENTS CANNOT BE EMPTY!");
+            }
+
             JsonWriterSMS writer = new JsonWriterSMS("./data/testWriterGeneralSMS.json");
             writer.open();
             writer.write(sms);
