@@ -39,7 +39,7 @@ non-empty message (unexpected).
 save us from crashing when trying to send an empty Message in JsonWriterSMSTest, JsonReaderSMS, PC, and InternalFrame.
 
 
-##Phase 4: Task 3
+## Phase 4: Task 3
 
 If I had more time to work on the project, I would refactor the design by:
 - introducing a type hierarchy for the persistence package
