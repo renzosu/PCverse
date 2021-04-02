@@ -37,3 +37,17 @@ catching EmptyMessageException when attempting to send an empty message (expecte
 non-empty message (unexpected).
 - Other subsequent uses of the sendMessage method surround it with try/catch statements to ensure correct behaviour or
 save us from crashing when trying to send an empty Message in JsonWriterSMSTest, JsonReaderSMS, PC, and InternalFrame.
+
+
+##Phase 4: Task 3
+
+If I had more time to work on the project, I would refactor the design by:
+- introducing a type hierarchy for the persistence package
+- creating a supertype called JsonWriter that JsonWriterGame and JsonWriterSMS extend
+- creating a supertype called JsonReader that JsonReaderGame and JsonReaderSMS extend
+
+The resulting design would have decreased duplication of code, decreased semantic coupling, and more presence of the
+Single Point of Control principle. 
+
+The UML class diagram would also be much cleaner as InternalFrame and PC would only have to have fields of JsonWriter 
+and JsonReader only.
