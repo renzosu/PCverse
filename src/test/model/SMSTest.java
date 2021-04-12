@@ -42,7 +42,7 @@ public class SMSTest {
     public void testSendMessageEmptyMessage() {
         try {
             sms.sendMessage(m0);
-            fail("should have thrown IllegalArgumentException");
+            fail("should have thrown EmptyMessageException");
         } catch (EmptyMessageException e) {
             System.err.println("Message contents cannot be empty!");
             // expected behaviour
