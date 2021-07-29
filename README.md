@@ -5,8 +5,10 @@
 The project's intent is to model a **personal computer** (PC) and its application functions.
 
 The PC will allow you to:
-- Access and use an SMS app
-- Access and play a game app
+- Access and use the Oasis SMS
+- Access and play the Ahoy Treasure Game
+
+![p1](https://user-images.githubusercontent.com/20495218/127549449-617157e6-9190-4e76-8fba-52f0e6a5b3cf.png)
 
 ## Features
 Oasis SMS: 
